@@ -1,5 +1,4 @@
 import {gql, useMutation, useQuery} from "@apollo/client";
-import {useState} from "react";
 
 const ALL_POSTS = gql`
  query AllPosts {
@@ -32,14 +31,9 @@ const CREATE_POST = gql`
 `;
 
 const List = () => {
-    const [isPostAdded, setIsPostAdded] = useState(false);
-    const [isPostLoading, setIsPostLoading] = useState(false);
     const { data, loading, error } = useQuery(ALL_POSTS);
     const [createPost, newPost] = useMutation(CREATE_POST, {
         update(cache, { data: { createPost } }) {
-            setIsPostLoading(false);
-            setIsPostAdded(true);
-
             const posts = cache.readQuery({ query: ALL_POSTS });
             cache.writeQuery({
                 query: ALL_POSTS,
@@ -53,8 +47,6 @@ const List = () => {
     }
 
     const handleAddPost = () => {
-        setIsPostLoading(true);
-
         const newPost = {
             userId: 1,
             title: 'Here\'s the new post!',
@@ -70,7 +62,7 @@ const List = () => {
             {renderPosts()}
             {(loading || newPost.loading) && <div>Loading...</div>}
             {(error || newPost.error) && <div>Sth bad happened! :( </div>}
-            <button disabled={isPostAdded || isPostLoading} onClick={handleAddPost}>Add a random post</button>
+            <button disabled={newPost.data || newPost.loading} onClick={handleAddPost}>Add a random post</button>
         </div>
     );
 }
