@@ -1,33 +1,35 @@
 import {gql, useMutation, useQuery} from "@apollo/client";
 
+const POST_FIELDS = gql`
+    fragment PostFields on Post {
+        title
+        id
+        body
+        author {
+           id
+           name
+         }
+    }
+`;
+
 const ALL_POSTS = gql`
  query AllPosts {
     posts {
         data {
-            title
-            id
-             body
-             author {
-               id
-               name
-             }
+            ...PostFields
         }
     }
   }
+  ${POST_FIELDS}
 `;
 
 const CREATE_POST = gql`
  mutation CreatePost($newPost: PostInput!) {
      createPost: addPost(data: $newPost) {
-                id
-                title
-                body
-                author {
-                  id
-                  name
-                }
+                ...PostFields
             }
   }
+ ${POST_FIELDS}
 `;
 
 const List = () => {
