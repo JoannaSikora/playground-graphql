@@ -1,5 +1,5 @@
-import List from './List';
-import './App.css';
+import PostsList from "../PostsList/PostsList";
+import "./App.css";
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
           GraphQl API client-side playground
       </header>
-        <List />
+        <PostsList />
     </div>
   );
 }
